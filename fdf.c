@@ -6,169 +6,65 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 23:49:12 by aqadil            #+#    #+#             */
-/*   Updated: 2021/11/30 16:38:06 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/02 18:03:07 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-//itoa
+int matrix[100][100] = {
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,10,10,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0},
+				{0,0,10,10,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0},
+				{0,0,10,10,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0},
+				{0,0,10,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0},
+				{0,0,10,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+				};
 
-static int	sizef(int n)
-{
-	int	size;
-
-	size = 0;
-	if (n == 0)
-		return (1);
-	while (n > 0)
-	{
-		size++;
-		n = n / 10;
-	}
-	return (size);
-}
-
-static char	*fill_min_int(void)
-{
-	char	*str;
-
-	str = malloc(12 * sizeof(char ));
-	str[0] = '-';
-	str[1] = '2';
-	str[2] = '1';
-	str[3] = '4';
-	str[4] = '7';
-	str[5] = '4';
-	str[6] = '8';
-	str[7] = '3';
-	str[8] = '6';
-	str[9] = '4';
-	str[10] = '8';
-	str[11] = '\0';
-	return (str);
-}
-
-static void	fill_the_array(char *str, int size, int sign, int n)
-{
-	while (--size != -1)
-	{
-		if (sign == 1 && size == 0)
-			break ;
-		str[size] = (n % 10) + 48;
-		n = n / 10;
-	}
-}
-
-char	*ft_itoa(int n)
-{
-	char	*str;
-	int		sign;
-	int		size;
-
-	sign = 0;
-	if (n == -2147483648)
-		return (fill_min_int());
-	if (n < 0)
-	{
-		sign = 1;
-		n = -n;
-	}
-	size = sizef(n);
-	str = (char *)malloc((size + 1 + sign) * sizeof(char));
-	if (str == NULL)
-		return (NULL);
-	if (sign == 1)
-	{
-		str[0] = '-';
-		size++;
-	}
-	fill_the_array(str, size, sign, n);
-	str[size] = '\0';
-	return (str);
-}
-
-
-//end itoa
-
-typedef struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}		t_data;
 
 typedef struct	s_vars {
 	void	*mlx;
 	void	*win;
+	float	x1;
+	float	x2;
+	float 	y1;
+	float	y2;
 }				t_vars;
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
+t_vars	vars;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+void ft_putchar(char c)
+{
+	write(1, &c, 1);
 }
 
 int	close_window(int keycode, t_vars *vars)
 {
-	char **map  = malloc(2000);
-	static int i = 0;
-	static int j = 0;
-	while (i < 20)
-		map[i++] = "XXXXXXXXXXXXX";
-	static int x1 = 300;
-	static int y1 = 0;
-	static int x = 0;
-	static int y = 0;
+	float x1 = 1000, y1 = 1000, x2 = 1, y2 = 1;
+	float dx = x2 - x1;
+	float dy = y2 - y1;
+	float max;
 
-	static int a = 1800;
-	static int b = 3;
-
-	static int k = 0;
-	static int l = 950;
-
-	char *str = ft_itoa(keycode);
-
-	if (keycode == 49)
-	{
-		l = l + 100;
-	}
+	if (dx > dy)
+		max = dx;
+	else
+		max = dy;
+	if (max < 0 )
+		max = -max;
+	dx = dx / max;
+	dy = dy / max;
 	if (keycode == 0)
 	{
-		mlx_string_put(vars->mlx, vars->win, x, y, 000000, "XXXXXXXXXXXXX");
-		x = x - 5;
-		y = y -5;
-	}
-	if (keycode == 2)
-	{
-		mlx_string_put(vars->mlx, vars->win, a, b, 000000, "XXXXXXXXXXXXX"); // puuting string in the middle of the window
-		a = a + 5;
-		b = b - 5;
-	}
-	if (keycode == 13)
-	{
-		mlx_string_put(vars->mlx, vars->win, l, k, 000000, "XXXXXXXXXXXXX"); // puuting string in the middle of the window
-		k = k - 5;
-	}
-	if (y < 1000 && keycode == 123)
-	{	
-		mlx_string_put(vars->mlx, vars->win, x, y, 16711680, "XXXXXXXXXXXXX"); // puuting string in the middle of the window
-		x = x + 5;
-		y = y + 5;
-	}
-	else if (b < 1000 && keycode == 124)
-	{
-		mlx_string_put(vars->mlx, vars->win, a, b, 15774330, "XXXXXXXXXXXXX"); // puuting string in the middle of the window
-		a = a - 5;
-		b = b + 5;
-	}	
-	else if (k < 1000 && keycode == 126)
-	{
-		mlx_string_put(vars->mlx, vars->win, l, k, 65280, "XXXXXXXXXXXXX"); // puuting string in the middle of the window
-		k = k + 5;
+		while ((int)(x1 - x2) || (int)(y1 - y2))
+		{
+			mlx_pixel_put(vars->mlx, vars->win, x1, y1, 15774330);
+			x1 = x1 + dx;
+			y1 = y1 + dy;
+		}
 	}
 	if (keycode == 53)
 	{
@@ -177,107 +73,163 @@ int	close_window(int keycode, t_vars *vars)
 	}
 	return (1);
 }
+void ft_putnbr(int nb)
+{
+	if (nb < 10)
+		ft_putchar(nb + 48);
+	else
+	{
+		ft_putnbr(nb / 10);
+		ft_putnbr(nb % 10);
+	}
+}
+
+// int handle(int keycode , int **matrix)
+// {
+// 	//mlx_clear_window(vars.mlx, vars.win);
+	
+// 	vars.x1 += 10;
+// 	vars.y1 += 10;
+// 	vars.x2 += 10;
+// 	vars.y2 += 10;
+// 	float dx = vars.x2 - vars.x1;
+// 	float dy = vars.y2 - vars.y1;
+// 	float max;
+	
+	
+// 	if (dx > dy)
+// 		max = dx;
+// 	else
+// 		max = dy;
+// 	if (max < 0 )
+// 		max = -max;
+// 	dx = dx / max;
+// 	dy = dy / max;
+// 	if (keycode == 0)
+// 	{
+// 		while ((int)(vars.x1 - vars.x2) || (int)(vars.y1 - vars.y2))
+// 		{
+// 			mlx_pixel_put(vars.mlx, vars.win, vars.x1, vars.y1, 15774330);
+// 			vars.x1 = vars.x1 + dx;
+// 			vars.y1 = vars.y1 + dy;
+// 		}
+// 	}
+// 	if (keycode == 53)
+// 	{
+// 		mlx_destroy_window(vars.mlx, vars.win);
+// 		kill(getpid(), SIGINT);
+// 	}
+// 	return (1);
+// }
+
+void the_freaking_3d(float *x, float *y, int z)
+{
+	*x = (*x - *y) * cos(0.8);
+	*y = (*x + *y) * sin(0.8) - z;
+}
+
+void draw_line(float x1, float x2, float y1, float y2)
+{
+	int z = 0; 
+	
+	z = matrix[(int)y1][(int)x1];
+	int z1 = 0;
+	z1 = matrix[(int)y2][(int)x2];
+	int color;
+	ft_putnbr(z1);
+	ft_putchar('\n');
+	
+	if (z || z1)
+		color = 15774330;
+	else
+		color = 16777215;
+		
+	// 3d
+	the_freaking_3d(&x1, &y1, z);
+	the_freaking_3d(&x2, &y2, z1);
+	
+	
+	x1 = x1 * 10;
+	x2 = x2 * 10;
+	y1 = y1 * 10;
+	y2 = y2 * 10;
+
+	x1 += 150;
+	x2 += 150;
+	y1 += 150;
+	y2 += 150;
+	
+	float dx = x2 - x1;
+	float dy = y2 - y1;
+	float max;
+
+	if (dx > dy)
+		max = dx;
+	else
+		max = dy;
+	if (max < 0 )
+		max = -max;
+	dx = dx / max;
+	dy = dy / max;
+
+	while ((int)(x1 - x2) || (int)(y1 - y2))
+	{
+		mlx_pixel_put(vars.mlx, vars.win, x1, y1, color);
+		x1 = x1 + dx;
+		y1 = y1 + dy;
+	}
+}
+
+int okey(int keycode, int *nothing)
+{
+	int x = 0;
+	int y = 0;
+	
+	float x1 = 0, y1 = 10;
+	float x2 = 400, y2 = 300;
+	/*draw_line(x1, x2, y1, y2);
+	int z = 10;
+	the_freaking_3d(&x1, &y1, z);
+	the_freaking_3d(&x2, &y2, z);
+	draw_line(x1, x2, y1, y2);*/
+	//draw_line(0, 500, 1, 500);
+
+	if (keycode == 0)
+	{
+		while (y < 10)
+		{
+			x = 0;
+			while (x < 19)
+			{
+				if (x < 19 - 1)
+					draw_line(x, x + 1, y, y);
+				if (y < 10 - 1)
+				    draw_line(x, x, y, y + 1);
+				x++;
+			}
+			y++;
+		}
+	}
+	if (keycode == 53)
+	{
+		mlx_destroy_window(vars.mlx, vars.win);
+		kill(getpid(), SIGINT);
+	}
+	return (1);
+}
 
 int	main(void)
 {
-	t_vars	vars;
-	t_data	img;
+	void *nothing;
+	vars.x1 = 1000, vars.y1 = 1000, vars.x2 = 1, vars.y2 = 1;
+
+	vars.mlx = mlx_init();
+	vars.win = mlx_new_window(vars.mlx, 1920, 1080, "FDF");
 
 	
-	vars.mlx = mlx_init(); // create the connection
-	vars.win = mlx_new_window(vars.mlx, 1920, 1080, "FDF"); // create a window and return a void pointer to it
-	
-	img.img = mlx_new_image(vars.mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-								&img.endian);
-	
-	int i = 10;
-	int j = 1280;
-	int x = 1280;
-	int y = 500;
-	// while(i < 500 && j > 10)
-	// {
-	// 	my_mlx_pixel_put(&img, 1280, i, 0x00FF0000);
-	// 	my_mlx_pixel_put(&img, j, 500, 0x00FF0000);
-	// 	my_mlx_pixel_put(&img, 791, i, 0x00FF0000);
-	// 	my_mlx_pixel_put(&img, j, 10, 0x00FF0000);
-	// 	j--;
-	// 	i++;
-	// }
-	// // right.....
-	// x = 1280;
-	// y = 10;
-	// while (x <= 1290 && y >= 0)
-	// {
-	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-	// 	x++;
-	// 	y--;
-	// }
-	// // left ..
-	// x = 790;
-	// y = 10;
-	// while (x <= 800 && y >= 0)
-	// {
-	// 	my_mlx_pixel_put(&img, x, y, 0x00FF0000);
-	// 	x++;
-	// 	y--;
-	// }
-
-	// lte7t
-	int point1x = 500;
-	int point1y = 500;
-
-	int point2x = 1500;
-	int point2y = 800;
-	
-	x = 1280;
-	y = 500;
-	while(point1x < point2x || point1y < point2y)
-	{
-		my_mlx_pixel_put(&img, point1x, point1y, 0x00FFFFFF);
-		if (point1x != point2x)
-			point1x++;
-		if (point2y != point1y)
-			point1y++;
-	}
-	
-	while (x <= 1380 && y >= 400)
-	{
-		
-		my_mlx_pixel_put(&img, x, y, 0x00FFFFFF);
-		x++;
-		y--;
-	}
-
-	// point1(500, 500);
-	// point2(1500, 800);
-	// x = 1000
-	// y = 650
-
-
-
-	// y = 400;
-	// while (y >= 0)
-	// {
-	// 	my_mlx_pixel_put(&img, 1380, y, 0x00FF0000);
-	// 	y--;
-	// }
+	mlx_key_hook(vars.win, okey, nothing);
 	
 
-
-	
-	// trying to connect two points
-	
-	mlx_pixel_put(vars.mlx, vars.win, 300, 300, 16711680);
-	mlx_pixel_put(vars.mlx, vars.win, 301, 301, 16711680);
-	mlx_pixel_put(vars.mlx, vars.win, 302, 302, 16711680);
-	mlx_pixel_put(vars.mlx, vars.win, 303, 303, 16711680);
-	mlx_pixel_put(vars.mlx, vars.win, 304, 304, 16711680);
-
-	mlx_put_image_to_window(vars.mlx, vars.win, img.img, 0, 0);
-	mlx_hook(vars.win, 2, 1L<<0, close_window, &vars); // getting keyboard input and doing somthing about it
-	
-	
-
-	mlx_loop(vars.mlx); // loop the connection to keep everything up and running
+	mlx_string_put(vars.mlx, vars.win, 500, 500, 15774330, "XXXXXXXXXXXXX");
+	mlx_loop(vars.mlx);
 }

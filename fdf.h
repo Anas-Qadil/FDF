@@ -6,7 +6,7 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 00:22:40 by aqadil            #+#    #+#             */
-/*   Updated: 2021/11/30 14:09:21 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/11/30 21:20:18 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
+# include <math.h>
+
 char	*ft_itoa(int n);
 
 # endif
