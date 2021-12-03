@@ -6,7 +6,7 @@
 #    By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/27 16:33:38 by aqadil            #+#    #+#              #
-#    Updated: 2021/11/30 14:00:57 by aqadil           ###   ########.fr        #
+#    Updated: 2021/12/03 22:11:27 by aqadil           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = fdf
 
 CC = gcc
 
-SRC = fdf.c
+SRC = fdf.c get_next_line.c get_next_line_utils.c read_maps.c
 
 OBJS = $(SRC:.c=.o)
 
