@@ -6,7 +6,7 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 21:05:09 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/03 22:12:40 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/04 00:20:41 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,10 @@ void	read_file(char *file, t_vars *vars)
 	}
 	vars->width = get_width(fd);
 	vars->height = get_height(fd);
-	vars->trick = (int **)malloc(sizeof(int *) * (vars->height + 1));
+	vars->trick = malloc(sizeof(int *) * (vars->height + 1));
 	i = 0;
 	while (i <= vars->height)
-		vars->trick[i++] = (int *)malloc(sizeof(int ) * (vars->width + 1));
+		vars->trick[i++] = malloc(sizeof(int ) * (vars->width + 1));
 	fd = open(file, O_RDONLY);
 	i = 0;
 	while ((line = get_next_line(fd)))
@@ -92,6 +92,8 @@ void	read_file(char *file, t_vars *vars)
 	}
 	vars->trick[i] = 0;
 }
+
+
 // int main(int argc, char **argv)
 // {
 // 	t_vars *vars;

@@ -6,7 +6,7 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 00:22:40 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/03 22:12:47 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/04 00:19:17 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct	s_vars {
 	void	*win;
 	int     move_x;
 	int     move_y;
+	int		z_scale;
 	int     zoom;
 	int		whichone;
 	int 	**trick;
@@ -64,11 +65,11 @@ char	*read_the_buffer(char *str, int fd);
 char	*get_line(char *str);
 char	*remove_readed_line(char *str);
 
-// int	ft_atoi(const char *str);
-// char	**ft_split(char const *s, char c);
-// char	*ft_strjoin(char *left_str, char *buff);
-// char	*ft_strchr(char *s, int c);
-// size_t	ft_strlen(char *s);
+int	ft_atoi(const char *str);
+char	**ft_split(char const *s, char c);
+char	*ft_strjoin(char *left_str, char *buff);
+char	*ft_strchr(char *s, int c);
+size_t	ft_strlen(char *s);
 
 
 # endif
