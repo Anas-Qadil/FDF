@@ -2,6 +2,11 @@
     "files.associations": {
         "stdlib.h": "c",
         "xlib.h": "c",
-        "mlx_int.h": "c"
+        "mlx_int.h": "c",
+        "__node_handle": "c",
+        "ostream": "c",
+        "ratio": "c",
+        "sstream": "c",
+        "ios": "c"
     }
 }

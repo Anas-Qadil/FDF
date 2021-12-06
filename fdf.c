@@ -6,25 +6,11 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/26 23:49:12 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/04 00:15:58 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/07 00:11:44 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-int matrix[100][100] = {
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,100,0,0,0},
-                {0,0,10,10,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0},
-                {0,0,10,10,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0},
-                {0,0,10,10,0,0,0,0,10,10,0,0,0,0,0,0,0,0,0},
-                {0,0,10,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0},
-                {0,0,10,10,10,10,10,10,10,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-                };
-
 
 void ft_putchar(char c)
 {
@@ -53,258 +39,150 @@ void	ft_putnbr(int nb)
     }
 }
 
-void the_freaking_3d(float *x, float *y, int z)
+
+void	isometric(t_vars *dot, double angle)
 {
-    *x = ((*x - *y) * cos(0.8));
-    *y = ((*x + *y) * sin(0.8) - z);
+	dot->x = (dot->x - dot->y) * cos(angle);
+	dot->y = (dot->x + dot->y) * sin(angle) - dot->z;
 }
 
-void draw_line(float x1, float x2, float y1, float y2, t_vars *vars)
+void	set_param(t_vars *a, t_vars *b, t_vars *param)
 {
-    int z = 0;
+    a->x = a->x * param->zoom;
+    a->y = a->y * param->zoom;
+    b->x = b->x * param->zoom;
+    b->y = b->y * param->zoom;
+    a->z = a->z * param->z_zoom;
+    b->z = b->z * param->z_zoom;
+	isometric(a, 0.523599);
+	isometric(b, 0.523599);
+    a->x = a->x + param->move_x;
+    a->y = a->y + param->move_y;
     
-    z = vars->trick[(int)y1][(int)x1];
-    int z1 = 0;
-    z1 = vars->trick[(int)y2][(int)x2];
-    int color;
-    if (z || z1)
-        color = 15774330;
-    else
-        color = 16777215;
+    b->x = b->x + param->move_x;
+    b->y = b->y + param->move_y;
+}
 
-    x1 = (x1 * vars->zoom);
-    x2 = (x2 * vars->zoom);
-    y1 = (y1 * vars->zoom);
-    y2 = (y2 * vars->zoom);
-    
-    the_freaking_3d(&x1, &y1, z);
-    the_freaking_3d(&x2, &y2, z1);
-    
-    x1 += vars->move_x;
-    x2 += vars->move_x;
-    y1 += vars->move_y;
-    y2 += vars->move_y;
-    
-    float dx = x2 - x1;
-    float dy = y2 - y1;
+float ft_abs(float dx, float dy)
+{
     float max;
 
     if (dx > dy)
         max = dx;
     else
         max = dy;
-    if (max < 0 )
+    if (max < 0)
         max = -max;
-    dx = dx / max;
-    dy = dy / max;
-    
-    while ((int)(x1 - x2) || (int)(y1 - y2))
-    {
-        mlx_pixel_put(vars->mlx, vars->win, x1, y1, color);
-        x1 = x1 + dx;
-        y1 = y1 + dy;
-    }
+    return (max);
 }
 
-void draw_in_2d(float x1, float x2, float y1, float y2, t_vars *vars)
+void    draw(t_vars a, t_vars b, t_vars *param)
 {
-    int z = 0; 
-    
-    z = vars->trick[(int)y1][(int)x1];
-    int z1 = 0;
-    z1 = vars->trick[(int)y2][(int)x2];
-    int color;
-    if (z || z1)
-        color = 15774330;
-    else
-        color = 16777215;
-        
-    x1 = x1 * vars->zoom;
-    x2 = x2 * vars->zoom;
-    y1 = y1 * vars->zoom;
-    y2 = y2 * vars->zoom;
-    
-    x1 += vars->move_x;;
-    x2 += vars->move_x;
-    y1 += vars->move_y;
-    y2 += vars->move_y;
-    
-    float dx = x2 - x1;
-    float dy = y2 - y1;
+    float dx;
+    float dy;
     float max;
+    
+    set_param(&a, &b, param);
+   
 
-    if (dx > dy)
-        max = dx;
-    else
-        max = dy;
-    if (max < 0 )
-        max = -max;
+    dx = b.x - a.x;
+    dy = b.y - a.y;
+    max = ft_abs(dx, dy);
     dx = dx / max;
     dy = dy / max;
-
-    while ((int)(x1 - x2) || (int)(y1 - y2))
+    while ((int)(a.x - b.x) || (int)(a.y - b.y))
     {
-        mlx_pixel_put(vars->mlx, vars->win, x1, y1, color);
-        x1 = x1 + dx;
-        y1 = y1 + dy;
+        mlx_pixel_put(param->mlx, param->win, a.x, a.y, (a.color));
+        a.x = a.x + dx;
+        a.y = a.y + dy;
+        if (a.x > param->win_x || a.y > param->win_y || a.y < 0 || a.x < 0)
+			break ;
     }
 }
 
-void okey(t_vars *vars)
+void handle_matrix(t_vars **matrix)
 {
     int x = 0;
     int y = 0;
 
-    while (y < 10)
+    while (matrix[y])
     {
         x = 0;
-        while (x < 19)
+        while (1)
         {
-            if (x < 19 - 1)
-                draw_line(x, x + 1, y, y, vars);
-            if (y < 10 - 1)
-                draw_line(x, x, y, y + 1, vars);
-            x++;
+            if (matrix[y + 1])
+				draw(matrix[y][x], matrix[y + 1][x], &PRM);
+			if (!matrix[y][x].is_last)
+				draw(matrix[y][x], matrix[y][x + 1], &PRM);
+			if (matrix[y][x].is_last)
+				break ;
+			x++;
         }
-        y++; 
+        y++;
     }
 }
 
-void okey_in_2d(t_vars *vars)
+int    handle_key(int keycode, t_vars **matrix)
 {
-    int x = 0;
-    int y = 0;
-    
-
-    while (y < 10)
-    {
-        x = 0;
-        while (x < 19)
-        {
-            if (x < 19 - 1)
-                draw_in_2d(x, x + 1, y, y, vars);
-            if (y < 10 - 1)
-                draw_in_2d(x, x, y, y + 1, vars);
-            x++;
-        }
-        y++; 
-    }
-}
-
-void    handle_2d_keys(int keycode, t_vars vars)
-{
-    
-}
-
-int handle_key(int keycode, t_vars *vars)
-{
-    mlx_clear_window(vars->mlx, vars->win);
-    if (keycode == 49)
-    {
-        vars->whichone = 2;
-        okey_in_2d(vars);
-    }
-    else if (keycode == 36)
-    {
-        vars->whichone = 3;
-        okey(vars);
-    }
-    if (keycode == 126 )
-    {
-        vars->move_y -= 100;
-        if (vars->whichone == 3)
-            okey(vars);
-        else 
-            okey_in_2d(vars);
-    }
-    if (keycode == 125)
-    {
-        vars->move_y += 100;
-        if (vars->whichone == 3)
-            okey(vars);
-        else 
-            okey_in_2d(vars);
-    }
     if (keycode == 123)
     {
-        vars->move_x -= 100;
-        if (vars->whichone == 3)
-            okey(vars);
-        else 
-            okey_in_2d(vars);
+        PRM.move_x -= 50;
+        mlx_clear_window(PRM.mlx, PRM.win);
+        handle_matrix(matrix);
+    }
+    if (keycode == 126)
+    {
+        PRM.move_y -= 50;
+        mlx_clear_window(PRM.mlx, PRM.win);
+        handle_matrix(matrix);
     }
     if (keycode == 124)
     {
-        vars->move_x += 100;
-        if (vars->whichone == 3)
-            okey(vars);
-        else 
-            okey_in_2d(vars);
+        PRM.move_x += 50;
+        mlx_clear_window(PRM.mlx, PRM.win);
+        handle_matrix(matrix);
+    }
+    if (keycode == 125)
+    {
+        PRM.move_y += 50;
+        mlx_clear_window(PRM.mlx, PRM.win);
+        handle_matrix(matrix);
     }
     if (keycode == 69)
     {
-        vars->zoom += 1;
-        if (vars->whichone == 3)
-            okey(vars);
-        else 
-            okey_in_2d(vars);
+        PRM.zoom += 1;
+        mlx_clear_window(PRM.mlx, PRM.win);
+        handle_matrix(matrix);
     }
     if (keycode == 78)
     {
-        if (vars->zoom)
-            vars->zoom -= 1;
-        if (vars->whichone == 3)
-            okey(vars);
-        else 
-            okey_in_2d(vars);
-    }
-    if (keycode == 53)
-    {
-        mlx_destroy_window(vars->mlx, vars->win);
-        kill(getpid(), SIGINT);
+        PRM.zoom -= 1;
+        mlx_clear_window(PRM.mlx, PRM.win);
+        handle_matrix(matrix);
     }
     return (1);
 }
 
-void    setdefault(t_vars *vars)
+void	set_default(t_vars *param)
 {
-    vars->move_x = 500;
-    vars->move_y = 500;
-    vars->whichone = 2;
-    vars->zoom = 10;
+	param->win_x = 2000;
+	param->win_y = 1000;
+    param->zoom = 20;
+    param->z_zoom = 1;
+    param->move_x = param->win_x / 3;
+    param->move_y = param->win_y / 3;
+	param->mlx = mlx_init();
+	param->win = mlx_new_window(param->mlx, param->win_x, param->win_y, "FDF");
 }
 
 int	main(int argc, char **argv)
 {
-    void *nothing;
-    t_vars	*vars;
-    vars = (t_vars *)malloc(sizeof(t_vars));
-    vars->mlx = mlx_init();
-    vars->win = mlx_new_window(vars->mlx, 1920, 1080, "FDF");
-    setdefault(vars);
-    // test reading from maps file
-	int	i, j;
-	
-	
-	read_file(argv[1], vars);
-	i = 0;
-	while (i <= vars->height)
-	{
-		j = 0;
-		while (j < vars->width)
-		{
-			printf("%3d", vars->trick[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
+	t_vars **matrix;
 
+	matrix = read_maps("./test_maps/pyramide.fdf");
+    set_default(&PRM);
+    handle_matrix(matrix);
 
-    // end test 
-
-    okey_in_2d(vars);
-    
-    mlx_key_hook(vars->win, handle_key, vars);
-    mlx_loop(vars->mlx);
+    mlx_key_hook(PRM.win, handle_key, matrix);
+    mlx_loop(PRM.mlx);
 }
