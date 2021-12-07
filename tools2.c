@@ -6,7 +6,7 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 17:25:37 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/07 22:49:05 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/07 23:24:04 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,18 @@ void	error_handle(int flag)
 	if (flag == 1)
 		write(1, "File Name Does Not Exist !!", 28);
 	exit(-1);
+}
+
+void	free_everything(t_fdf **matrix)
+{
+	int	i;
+
+	i = 0;
+	mlx_clear_window(PRM.mlx, PRM.win);
+	while (matrix[i])
+		free(matrix[i++]);
+	free(matrix);
+	exit (-1);
 }
 
 void	isometric(t_fdf *dot, double angle)

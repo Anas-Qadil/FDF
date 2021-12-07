@@ -6,7 +6,7 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 17:07:46 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/07 19:14:07 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/07 23:02:58 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ void	handle_movement(int keycode, t_fdf **matrix)
 
 int	handle_key(int keycode, t_fdf **matrix)
 {
+	int	i;
+
+	i = 0;
 	mlx_clear_window(PRM.mlx, PRM.win);
 	handle_movement(keycode, matrix);
 	if (keycode == 49)
@@ -45,7 +48,7 @@ int	handle_key(int keycode, t_fdf **matrix)
 		PRM.angle = PRM.angle + 0.10;
 	handle_matrix(matrix);
 	if (keycode == 53)
-		exit(-1);
+		free_everything(matrix);
 	return (1);
 }
 
