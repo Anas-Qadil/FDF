@@ -6,12 +6,11 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 22:05:46 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/03 16:57:49 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/07 19:14:58 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
 
 char	*read_the_buffer(char *str, int fd)
 {
@@ -91,7 +90,7 @@ char	*get_next_line(int fd)
 {
 	static char	*str;
 	char		*line;
-		
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	str = read_the_buffer(str, fd);
