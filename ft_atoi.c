@@ -6,7 +6,7 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/02 17:05:08 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/07 19:05:36 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/08 16:12:21 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	get_width(int fd)
 	{
 		while (line[i] == ' ' && line[i])
 			i++;
+		if (line[i] == '\0')
+			break ;
 		width++;
 		while (line[i] != ' ' && line[i])
 			i++;

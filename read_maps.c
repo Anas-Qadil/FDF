@@ -6,23 +6,28 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 21:05:09 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/07 23:10:42 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/08 20:40:32 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	ft_pow(int x, unsigned int y)
+int	ft_pow(int nb, int power)
 {
-	int	temp;
+	int	ret;
 
-	if (y == 0)
-		return (1);
-	temp = ft_pow(x, y / 2);
-	if (y % 2 == 0)
-		return (temp * temp);
+	if (power == 0)
+		ret = 1;
+	else if (power < 0)
+		ret = 0;
 	else
-		return (x * temp * temp);
+		ret = nb;
+	while (power > 1)
+	{
+		ret = ret * nb;
+		power--;
+	}
+	return (ret);
 }
 
 int	hexadecimal_to_decimal(char *hex)

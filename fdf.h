@@ -6,7 +6,7 @@
 /*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/27 00:22:40 by aqadil            #+#    #+#             */
-/*   Updated: 2021/12/07 23:03:11 by aqadil           ###   ########.fr       */
+/*   Updated: 2021/12/08 20:23:49 by aqadil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ void	error_handle(int flag);
 float	fmodule(float i);
 int		handle_key(int keycode, t_fdf **matrix);
 void	free_everything(t_fdf **matrix);
+int		ft_pow(int nb, int power);
 
 #endif
