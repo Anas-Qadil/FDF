@@ -9,4 +9,3 @@ This project is about creating a simplified 3D graphic representation of a relie
 
 _At the [wiki-pages](../../wiki) of project you can find detailed explanations and tips._
 
-[`fdf.en.pdf`](/fdf.en.pdf) is the task file.
